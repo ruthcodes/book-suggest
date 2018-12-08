@@ -1,0 +1,39 @@
+.container{
+  position: relative;
+  margin: auto;
+  display: block;
+  width: 800px;
+  height: 620px;
+  border: 1px solid red;
+}
+
+.hide{
+  visibility: hidden;
+}
+
+.show{
+  visibility: visible;
+  animation: visibility 3.25s;
+  position: absolute;
+  width: 98px; height: 20px;
+  top: 40%;
+  left: 40%;
+}
+
+.bookAnimate{
+  position: absolute;
+  animation: createBox 3.25s;
+  width: 98px; height: 98px;
+  top: 20%;
+  left: 40%;
+  background: blue;
+}
+
+@keyframes createBox {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
