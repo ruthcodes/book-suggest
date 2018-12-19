@@ -1,10 +1,86 @@
+body{
+  line-height: 1.5;
+}
+
 .container{
   position: relative;
   margin: auto;
   display: block;
-  width: 800px;
-  height: 620px;
-  border: 1px solid red;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+  padding: 40px;
+  margin: 5px;
+  background: #e5e3e3;
+}
+
+i{
+  font-size: 20px;
+  padding: 5px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  background-image: grey;
+  cursor: pointer;
+}
+
+/*container for entire custom select element*/
+.custom-select{
+  position: relative;
+  width: 40%;
+  display: inline-block;
+  margin: 5px;
+}
+
+select{
+  display: none;
+}
+/*The chosen option from select, (pink)*/
+.custom-selected-option {
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+  text-shadow: 0 0 2px black;
+}
+/*The arrow inside the chosen option*/
+.custom-selected-option:after {
+  position: absolute;
+  content: "";
+  top: 26px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+  text-shadow: 0 0 2px black;
+}
+/*Switch arrow to point up when menu open*/
+.menu-open:after {
+  border-color: transparent transparent #fff transparent;
+  top: 13px;
+}
+/*shared styling of selected option and rest of list*/
+.select-items div,.custom-selected-option {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+/*styling for custom options (blue fade)*/
+.select-items {
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+}
+/*hide the custom options when the menu is closed:*/
+.hidden-options {
+  display: none;
+}
+/*darken the tone of each option when it is hovered on*/
+.select-items div:hover, .highlight-selection {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .hide{
@@ -15,7 +91,6 @@
   visibility: visible;
   animation: visibility 3.25s;
   position: absolute;
-  width: 98px; height: 20px;
   top: 40%;
   left: 40%;
 }
@@ -23,10 +98,10 @@
 .bookAnimate{
   position: absolute;
   animation: createBox 3.25s;
-  width: 98px; height: 98px;
+  width: 17%; height: 30%;
   top: 20%;
   left: 40%;
-  background: blue;
+  background: red;
 }
 
 @keyframes createBox {
@@ -34,6 +109,6 @@
     transform: scale(0);
   }
   to {
-    transform: scale(1);
+    transform: scale(2);
   }
 }

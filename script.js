@@ -3,7 +3,8 @@ let apiKeyNYTimes = //yourkey;
 
 const bookCover = document.querySelector('#bookCover');
 const bookText = document.querySelector('#bookText');
-const myButton = document.querySelector('button');
+const myButton = document.querySelector('i');
+
 let optionChosen = document.querySelector('select');
 
 myButton.addEventListener('click', (e) => handleClick(e.target));
@@ -68,3 +69,60 @@ const handleClick = async (e) => {
   bookText.innerHTML = `${bookTitle}, ${bookAuthor}. ${bookSubtitle}`;
 
 }
+
+
+//custom select dropdown
+
+let outerSelectDiv = document.querySelector('.custom-select');
+let select = document.querySelector('select');
+
+let customSelected = document.createElement("div");
+customSelected.classList.add('custom-selected-option');
+customSelected.innerHTML = select.options[select.selectedIndex].innerHTML;
+outerSelectDiv.appendChild(customSelected);
+
+//custom container for other options (not selected one)
+let customOptionsContainer = document.createElement("div");
+customOptionsContainer.classList.add("select-items");
+customOptionsContainer.classList.add('hidden-options');
+
+//loop through all the real options
+let customOption;
+for (let j = 0; j < select.length; j++) {
+  //create a new option for each of the original ones
+  customOption = document.createElement("div");
+  customOption.innerHTML = select.options[j].innerHTML;
+  customOption.value = select.options[j].value;
+  if (customOption.innerHTML === "Science") customOption.classList.add("highlight-selection");
+
+  //update original when custom clicked
+  customOption.addEventListener("click", function(e) {
+      //change the top custom 'selected' to this
+      customSelected.innerHTML = this.innerHTML;
+      //loop through all custom options and remove selection highlight
+      for (let i=0;i<customOptionsContainer.children.length;i++){
+        if (select[i].innerHTML === this.innerHTML){
+          select.value = this.value;
+        }
+        customOptionsContainer.children[i].classList.remove('highlight-selection')
+      }
+      this.classList.add('highlight-selection');
+      customSelected.click();
+  });
+  customOptionsContainer.appendChild(customOption);
+}
+  outerSelectDiv.appendChild(customOptionsContainer);
+  customSelected.addEventListener("click", function(e) {
+      //toggle custom options open/closed when custom selected is clicked
+      // prevent parent handler from firing
+      e.stopPropagation();
+
+      //hide/show custom options, flip arrow
+      customOptionsContainer.classList.toggle("hidden-options");
+      this.classList.toggle("menu-open");
+    });
+
+
+/*if the user clicks anywhere outside the select box,
+then close all select boxes:*/
+document.addEventListener("click", ()=> customOptionsContainer.classList.add("hidden-options"));

@@ -1,23 +1,32 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="#" />
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
 </head>
 
 <body>
   <div class="container">
-    <div>
+    <div class="textSearch">
       <h2>Suggest a
-        <select>
-          <option value="science">Science</option>
-          <option value="hardcover-political-books">Political</option>
-          <option value="humor">Comedy</option>
-          <option value="food-and-fitness">Food</option>
-          <option value="crime-and-punishment">Crime</option>
-          <option value="young-adult">Young Adult</option>
-          <option value="sports">Sports</option>
-        </select>
+        <br>
+        <div class="custom-select">
+          <select id="selectParent">
+            <option value="science">Science</option>
+            <option value="hardcover-political-books">Political</option>
+            <option value="humor">Comedy</option>
+            <option value="food-and-fitness">Food</option>
+            <option value="crime-and-punishment">Crime</option>
+            <option value="young-adult">Young Adult</option>
+            <option value="sports">Sports</option>
+          </select>
+        </div>
+        <br>
          book for me</h2>
-        <button>!</button>
+        <i class="fas fa-search"></i>
+
         <div class="book">
           <div id="bookCover"></div>
           <div id="bookText" class="hide"></div>
