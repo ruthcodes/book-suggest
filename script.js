@@ -2,7 +2,11 @@ let apiKeyGoogle = //yourkey;
 let apiKeyNYTimes = //yourkey;
 
 const bookCover = document.querySelector('#bookCover');
-const bookText = document.querySelector('#bookText');
+//const bookText = document.querySelector('#bookText');
+const bookTitle = document.querySelector('#bookTitle');
+const bookDescription = document.querySelector('#bookDescription');
+const bookAuthor = document.querySelector('#bookAuthor');
+const bookReview = document.querySelector('#bookReview');
 const myButton = document.querySelector('i');
 
 let optionChosen = document.querySelector('select');
@@ -19,12 +23,17 @@ const getRandomBestseller = async () => {
       author: data.results[randomNumber].book_details[0].author,
       description: data.results[randomNumber].book_details[0].description,
     }
-    if (data.results[randomNumber].book_details[0].primary_isbn13){
-      obj.isbn = data.results[randomNumber].book_details[0].primary_isbn13;
-    } else if (data.results[randomNumber].isbns[0].isbn13){
-      obj.isbn = data.results[randomNumber].book_details[0].primary_isbn13;
+    if (data.results[randomNumber].isbns[0].isbn13){
+      obj.isbn = data.results[randomNumber].isbns[0].isbn13;
+      console.log('using the isbn array')
+      console.log(obj.isbn);
     } else {
-      obj.isbn = "none";
+      obj.isbn = data.results[randomNumber].book_details[0].primary_isbn13;
+    }
+
+
+    if (obj.description === ""){
+      obj.description = "Uh oh, looks like we don't have a description for this book... Just judge it by its cover, I hear that's what you're supposed to do with books anyway"
     }
     return obj;
   } catch (err) {
@@ -33,6 +42,12 @@ const getRandomBestseller = async () => {
 }
 
 const findGoogleBookCover = async (isbn) => {
+  //try open library, if no thumbnail, try google books
+  let pic = `http://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
+  let img = new Image();
+  img.src = pic;
+  if (img.height !== 0) return pic;
+
   try {
     let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn=${isbn}&key=${apiKeyGoogle}`);
     let data = await res.json();
@@ -42,34 +57,65 @@ const findGoogleBookCover = async (isbn) => {
   }
 }
 
+const getBookReviewLink = async (isbn) => {
+  try {
+    let response = await fetch(`https://api.nytimes.com/svc/books/v3/reviews.json?api-key=${apiKeyNYTimes}&isbn=${isbn}`);
+    let data = await response.json();
+    return data.results[0].url;
+  } catch (err){
+    console.log(err);
+  }
+}
+
 const handleClick = async (e) => {
+
   //remove any previously shown cover and text
-  bookText.classList.add('hide');
-  bookText.classList.remove('show');
+  bookTitle.classList.add('hide');
+  bookTitle.classList.remove('show');
   bookCover.classList.remove('bookAnimate');
 
   //make api calls, parse
   let randBook = await getRandomBestseller();
   let cover = await findGoogleBookCover(randBook.isbn);
+  let review = await getBookReviewLink(randBook.isbn);
 
   // assign vars
-  let bookTitle = randBook.title;
-  let bookAuthor = randBook.author;
-  let bookSubtitle = randBook.description;
+  let title = randBook.title;
+  let author = randBook.author;
+  let subtitle = randBook.description;
 
+  //if there is no review, do a feeling lucky google search for one
+  if (!review){
+    review = `https://www.google.com/search?q=${title.replace(/ /g, '%20')}%20${author.replace(/ /g, '%20')}%20review`;
+  }
+
+  //update book text;
+  bookAuthor.innerHTML = `by ${author}`;
+  bookTitle.innerHTML = `${title}`;
+  bookDescription.innerHTML = `${subtitle}`;
   //animate book cover
   bookCover.classList.add('bookAnimate');
-  setTimeout(()=> {
-    bookText.classList.add('show');
-    bookText.classList.remove('hide');
+  bookAuthor.classList.add('bookAnimate');
+  bookDescription.classList.add('bookText');
 
-  },3000);
+  bookTitle.classList.add('show');
+  bookTitle.classList.remove('hide');
+
   bookCover.style.backgroundImage = `url(${cover})`;
-  //update book text;
-  bookText.innerHTML = `${bookTitle}, ${bookAuthor}. ${bookSubtitle}`;
+  bookAuthor.classList.add('bookText');
+  bookDescription.classList.add('bookText');
+  bookTitle.classList.add('bookText');
+  bookReview.classList.add('bookText');
+
+  bookReview.innerHTML = `<a href= ${review} target='_blank'>Click here to read a review of this book</a>`;
+
+  //set background colours
+  bookAuthor.style.background = "#ccccff";
+  bookDescription.style.background = "#ffccff";
+  bookTitle.style.background = "#ccffff";
+  //bookText.innerHTML = `${bookTitle}, ${bookAuthor}. ${bookSubtitle}`;
 
 }
-
 
 //custom select dropdown
 
@@ -111,16 +157,17 @@ for (let j = 0; j < select.length; j++) {
   });
   customOptionsContainer.appendChild(customOption);
 }
-  outerSelectDiv.appendChild(customOptionsContainer);
-  customSelected.addEventListener("click", function(e) {
-      //toggle custom options open/closed when custom selected is clicked
-      // prevent parent handler from firing
-      e.stopPropagation();
 
-      //hide/show custom options, flip arrow
-      customOptionsContainer.classList.toggle("hidden-options");
-      this.classList.toggle("menu-open");
-    });
+outerSelectDiv.appendChild(customOptionsContainer);
+customSelected.addEventListener("click", function(e) {
+    //toggle custom options open/closed when custom selected is clicked
+    // prevent parent handler from firing
+    e.stopPropagation();
+
+    //hide/show custom options, flip arrow
+    customOptionsContainer.classList.toggle("hidden-options");
+    this.classList.toggle("menu-open");
+});
 
 
 /*if the user clicks anywhere outside the select box,

@@ -1,17 +1,27 @@
 body{
   line-height: 1.5;
+  font-family: 'Nunito', sans-serif;
 }
 
-.container{
+.container {
   position: relative;
   margin: auto;
+  margin-bottom: 20px;
   display: block;
+  padding: 40px;
+}
+
+.bookText{
+  padding: 10px;
+  height: 200px;
+  transition: all 1s ease-out;
+}
+
+.container, .bookText{
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   border-radius: 6px;
   -webkit-border-radius: 6px;
-  font-family: 'Nunito', sans-serif;
   text-align: center;
-  padding: 40px;
   margin: 5px;
   background: #e5e3e3;
 }
@@ -85,30 +95,48 @@ select{
 
 .hide{
   visibility: hidden;
+  animation: visibility 3.25s;
 }
 
 .show{
   visibility: visible;
-  animation: visibility 3.25s;
-  position: absolute;
-  top: 40%;
-  left: 40%;
+  animation: createBox 3.25s;
 }
 
 .bookAnimate{
-  position: absolute;
   animation: createBox 3.25s;
-  width: 17%; height: 30%;
-  top: 20%;
-  left: 40%;
-  background: red;
+  width: 250px; height: 400px;
+  background-size: cover;
 }
+
+.book{
+  display: flex;
+}
+
+#bookTitle{
+  text-align: center;
+  height: 50px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+#bookCover{
+  flex: 1;
+  margin: 5px;
+}
+
+#bookAuthor, #bookDescription{
+  flex: 1;
+  animation: createBox 3.25s;
+  text-align: center;
+}
+
 
 @keyframes createBox {
   from {
     transform: scale(0);
   }
   to {
-    transform: scale(2);
+    transform: scale(1);
   }
 }
